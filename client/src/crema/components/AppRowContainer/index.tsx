@@ -18,7 +18,7 @@ const AppRowContainer: React.FC<AppRowContainerProps> = ({
     <StyledAppRowContainer style={style}>
       <AppAnimate>
         <Row
-          style={{ flexDirection: 'row', display: 'inherit' }}
+          style={{ flexDirection: 'row' }}
           gutter={{ xs: 16, sm: 16, md: 32 }}
           {...others}
         >

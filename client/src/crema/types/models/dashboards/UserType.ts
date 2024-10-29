@@ -1,5 +1,6 @@
 import { AttachmentType } from "./AttachmentType";
 import { DepartmentType, OrganizationType } from "./OrganizationType";
+import { ProjectType } from "./ProjectType";
 
 export type UserType = {
   _id?: string;
@@ -27,6 +28,7 @@ export type UserType = {
     currency: string;
   };
   currentDepartment?: DepartmentType;
+  currentProject?: ProjectType;
   tmpPassword?: boolean;
   dateOfBorn?: string;
   status?: string;

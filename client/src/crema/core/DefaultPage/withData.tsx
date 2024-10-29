@@ -1,12 +1,7 @@
 import AppLoader from "@crema/components/AppLoader";
-import {
-  authorizationUrl,
-  initialUrl
-} from "@crema/constants/AppConst";
+import { authorizationUrl, initialUrl } from "@crema/constants/AppConst";
 import { useAuthUser } from "@crema/hooks/AuthHooks";
-import {
-  DepartmentType
-} from "@crema/types/models/dashboards/OrganizationType";
+import { ProjectType } from "@crema/types/models/dashboards/ProjectType";
 import Router, { useRouter } from "next/router";
 import { useEffect } from "react";
 import { UserStatusEnums } from "utils/common-constants.utils";
@@ -15,28 +10,28 @@ import { TAM_SIGNIN_URL } from "utils/end-points.utils";
 // eslint-disable-next-line react/display-name
 const withData = (ComposedComponent: any) => (props: any) => {
   // States
-  const { user, isLoading, departments } = useAuthUser();
+  const { user, isLoading, projects } = useAuthUser();
   const { asPath, query } = useRouter();
   const queryParams = asPath.split("?")[1];
 
   console.log(user);
-  console.log(departments);
+  console.log(projects);
 
   // Init
   useEffect(() => {
     if (user) {
       if (
         user.status === UserStatusEnums.ACTIVE &&
-        checkOrganizations(
-          departments?.filter(
-            (dpt) => dpt.status === UserStatusEnums.ACTIVE
+        checkProjects(
+          projects?.filter(
+            (project) => project.status === UserStatusEnums.ACTIVE
           )
         )
       ) {
         Router.push(initialUrl + (queryParams ? "?" + queryParams : ""));
       } else if (
         user.status !== UserStatusEnums.ACTIVE ||
-        departments.length > 1
+        projects.length > 1
       ) {
         Router.push(authorizationUrl);
       } else {
@@ -45,12 +40,12 @@ const withData = (ComposedComponent: any) => (props: any) => {
     } else {
       Router.push(TAM_SIGNIN_URL);
     }
-  }, [queryParams, user, departments]);
+  }, [queryParams, user, projects]);
 
   // Functions
-  const checkOrganizations = (departments: DepartmentType[]) => {
-    if (departments.length === 1) {
-      return departments[0].status === UserStatusEnums.ACTIVE ? true : false;
+  const checkProjects = (projects: ProjectType[]) => {
+    if (projects.length === 1) {
+      return projects[0].status === UserStatusEnums.ACTIVE ? true : false;
     } else false;
   };
 

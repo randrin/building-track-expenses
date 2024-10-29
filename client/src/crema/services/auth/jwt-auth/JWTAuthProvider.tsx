@@ -16,6 +16,8 @@ import {
   UsersProfileStepEnums,
 } from "utils/common-constants.utils";
 import {
+  BTE_PROJECTS_USER_URL,
+  BTE_UPDATE_USER_PROJECT_URL,
   TAM_AUTHENTICATE_URL,
   TAM_DELETE_PROFILE_URL,
   TAM_DEPARTMENTS_USER_URL,
@@ -28,13 +30,14 @@ import {
   TAM_USERS_URL,
 } from "utils/end-points.utils";
 import jwtAxios, { setAuthToken } from "./index";
+import { ProjectType } from "@crema/types/models/dashboards/ProjectType";
 
 interface JWTAuthContextProps {
   user: AuthUserType | null | undefined;
   isAuthenticated: boolean;
   isLoading: boolean;
-  departments: DepartmentType[];
-  currentDepartment: DepartmentType;
+  projects: ProjectType[];
+  currentProject: ProjectType;
 }
 
 interface SignUpProps {
@@ -68,8 +71,8 @@ const JWTAuthContext = createContext<JWTAuthContextProps>({
   user: null,
   isAuthenticated: false,
   isLoading: false,
-  departments: [],
-  currentDepartment: null,
+  projects: [],
+  currentProject: null,
 });
 const JWTAuthActionsContext = createContext<JWTAuthActionsProps>({
   getAuthUser: () => {},
@@ -100,8 +103,8 @@ const JWTAuthAuthProvider: React.FC<JWTAuthAuthProviderProps> = ({
     user: null,
     isAuthenticated: false,
     isLoading: true,
-    departments: [],
-    currentDepartment: null,
+    projects: [],
+    currentProject: null,
   });
   const { messages } = useIntl();
   const router = useRouter();
@@ -124,8 +127,8 @@ const JWTAuthAuthProvider: React.FC<JWTAuthAuthProviderProps> = ({
         user: undefined,
         isLoading: false,
         isAuthenticated: false,
-        departments: [],
-        currentDepartment: undefined,
+        projects: [],
+        currentProject: undefined,
       });
       return;
     }
@@ -145,11 +148,11 @@ const JWTAuthAuthProvider: React.FC<JWTAuthAuthProviderProps> = ({
             user: data.user,
             isLoading: false,
             isAuthenticated: true,
-            departments: dataDepartments.data,
-            currentDepartment:
+            projects: dataDepartments.data,
+            currentProject:
               dataDepartments.data.length === 1
                 ? dataDepartments.data[0]
-                : data.user.currentDepartment,
+                : data.user.currentProject,
           });
         } else {
           localStorage.removeItem("token");
@@ -158,8 +161,8 @@ const JWTAuthAuthProvider: React.FC<JWTAuthAuthProviderProps> = ({
             user: null,
             isLoading: false,
             isAuthenticated: false,
-            departments: [],
-            currentDepartment: null,
+            projects: [],
+            currentProject: null,
           });
         }
       })
@@ -168,8 +171,8 @@ const JWTAuthAuthProvider: React.FC<JWTAuthAuthProviderProps> = ({
           user: undefined,
           isLoading: false,
           isAuthenticated: false,
-          departments: [],
-          currentDepartment: undefined,
+          projects: [],
+          currentProject: undefined,
         });
         console.log("error: ", error);
         infoViewActionsContext.fetchError(error?.response?.data?.message);
@@ -180,17 +183,19 @@ const JWTAuthAuthProvider: React.FC<JWTAuthAuthProviderProps> = ({
     infoViewActionsContext.fetchStart();
     try {
       const { data } = await jwtAxios.post(TAM_LOGIN_URL, { email, password });
-
+      console.log(data);
       jwtAxios.defaults.headers.common.Authorization = `Bearer ${data.accessToken}`;
 
-      // Retrieve user departments
-      const { data: dataDepartments } = await jwtAxios.get(
-        `${TAM_DEPARTMENTS_USER_URL}/${data.user._id}`
+      // Retrieve user projects
+      const { data: projects } = await jwtAxios.get(
+        `${BTE_PROJECTS_USER_URL}/${data.user._id}`
       );
 
-      if (dataDepartments.data.length === 1) {
+      console.log(projects);
+      
+      if (projects.length === 1) {
         await jwtAxios.put(
-          `${TAM_UPDATE_USER_DEPARTMENT_URL}/${dataDepartments.data[0]._id}/profile/${data.user._id}`,
+          `${BTE_UPDATE_USER_PROJECT_URL}/${projects[0]._id}/profile/${data.user._id}`,
           {}
         );
       }
@@ -200,11 +205,11 @@ const JWTAuthAuthProvider: React.FC<JWTAuthAuthProviderProps> = ({
         user: data.user,
         isLoading: false,
         isAuthenticated: true,
-        departments: dataDepartments.data,
-        currentDepartment:
-          dataDepartments.data.length === 1
-            ? dataDepartments.data[0]
-            : data.user.currentDepartment,
+        projects,
+        currentProject:
+          projects.length === 1
+            ? projects[0]
+            : data.user.currentProject,
       });
 
       // Store the token in session only if the status is ACTIVE
@@ -246,8 +251,8 @@ const JWTAuthAuthProvider: React.FC<JWTAuthAuthProviderProps> = ({
         user: res.data,
         isAuthenticated: true,
         isLoading: false,
-        departments: userOrganizations,
-        currentDepartment: null,
+        projects: userOrganizations,
+        currentProject: null,
       });
       infoViewActionsContext.fetchSuccess();
     } catch (error) {
@@ -265,8 +270,8 @@ const JWTAuthAuthProvider: React.FC<JWTAuthAuthProviderProps> = ({
       user: undefined,
       isAuthenticated: false,
       isLoading: false,
-      departments: [],
-      currentDepartment: undefined,
+      projects: [],
+      currentProject: undefined,
     });
   };
 
@@ -280,8 +285,8 @@ const JWTAuthAuthProvider: React.FC<JWTAuthAuthProviderProps> = ({
         user: null,
         isLoading: false,
         isAuthenticated: false,
-        departments: [],
-        currentDepartment: null,
+        projects: [],
+        currentProject: null,
       });
       infoViewActionsContext.showMessage(data.message);
     } catch (error) {
@@ -386,8 +391,8 @@ const JWTAuthAuthProvider: React.FC<JWTAuthAuthProviderProps> = ({
           description: handleOnGetMessage("message.profileUpdated"),
         });
         setJWTAuthData({
-          departments: [],
-          currentDepartment: null,
+          projects: [],
+          currentProject: null,
           user: null,
           isAuthenticated: false,
           isLoading: false,
@@ -426,7 +431,7 @@ const JWTAuthAuthProvider: React.FC<JWTAuthAuthProviderProps> = ({
         ...firebaseData,
         isAuthenticated: false,
         isLoading: false,
-        currentDepartment: null,
+        currentProject: null,
       });
       console.log("Error: ", error);
       infoViewActionsContext.showMessage(error?.response?.data?.message);

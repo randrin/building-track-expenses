@@ -6,14 +6,14 @@ import {
 } from "@crema/services/auth/jwt-auth/JWTAuthProvider";
 
 export const useAuthUser = () => {
-  const { user, isAuthenticated, isLoading, departments, currentDepartment } =
+  const { user, isAuthenticated, isLoading, projects, currentProject } =
     useJWTAuth();
   return {
     isLoading,
     isAuthenticated,
     user, //: getUserFromJwtAuth(user),
-    departments,
-    currentDepartment,
+    projects,
+    currentProject,
   };
 };
 

@@ -3,6 +3,7 @@ import {
   DepartmentType,
   OrganizationType,
 } from "./dashboards/OrganizationType";
+import { ProjectType } from "./dashboards/ProjectType";
 
 export type AuthUserType = {
   _id?: string;
@@ -25,6 +26,7 @@ export type AuthUserType = {
     zipCode: string;
   };
   currentDepartment?: DepartmentType;
+  currentProject?: ProjectType;
   tmpPassword?: boolean;
   dateOfBorn?: string;
   status?: string;

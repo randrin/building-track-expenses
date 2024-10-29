@@ -41,14 +41,14 @@ const AuthWrapper = ({ children }: Props) => {
           duration={200}
         >
           <StyledAuthWrap key={"wrap"}>
-            <StyledAuthCard>
+            {/* <StyledAuthCard> */}
               <StyledAuthMainContent>
-                <StyledAuthCardHeader>
+                {/* <StyledAuthCardHeader>
                   <AppLogo />
-                </StyledAuthCardHeader>
+                </StyledAuthCardHeader> */}
                 {children}
               </StyledAuthMainContent>
-              <StyledAuthWellAction>
+              {/* <StyledAuthWellAction>
                 <StyledAuthWelContent>
                   <h2>
                     <IntlMessages id="welcome.app.title" />
@@ -57,8 +57,8 @@ const AuthWrapper = ({ children }: Props) => {
                     <IntlMessages id="welcome.app.description" />
                   </p>
                 </StyledAuthWelContent>
-              </StyledAuthWellAction>
-            </StyledAuthCard>
+              </StyledAuthWellAction> */}
+            {/* </StyledAuthCard> */}
             <StyledAuthContactLink className="tt-expenses-space-center">
               <span>
                 <IntlMessages id="common.contact.need" />
