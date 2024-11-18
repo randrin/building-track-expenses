@@ -23,7 +23,6 @@ import { useEffect, useState } from "react";
 import { useIntl } from "react-intl";
 import { TAM_FORGOT_PASSWORD_LINK } from "utils/end-points.utils";
 import Logo from "../../../../assets/user/login.png";
-import { StyledSign } from "./index.styled";
 
 const SignInJwtAuth = () => {
   // States
@@ -119,7 +118,7 @@ const SignInJwtAuth = () => {
 
   // Render
   return (
-    <StyledSign>
+    <StyledUserPages>
       <AppPageMeta title="Signin" />
       <AppAnimate animation="transition.slideUpIn" delay={200}>
         <StyledUserContainer>
@@ -211,7 +210,7 @@ const SignInJwtAuth = () => {
           </StyledUserCardLg>
         </StyledUserContainer>
       </AppAnimate>
-    </StyledSign>
+    </StyledUserPages>
     // <StyledSign>
     //   <StyledSignContent>
     //     <StyledSignForm

@@ -19,7 +19,7 @@ export const StyledUserContainer = styled.div`
   align-items: center;
   justify-content: center;
   flex: 1;
-  background: #f5f5f5;
+  //background: #f5f5f5;
 
   @media screen and (min-width: ${({ theme }) => theme.breakpoints.xxl}px) {
     padding-top: 32px;
